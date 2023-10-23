@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="weather.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container pt-5 ">
+        <div class="row">
+            <div style="background-image: url(./pexels-skitterphoto-597054.jpg); background-position: center; background-size:cover; position: relative; height: 70vh;  " class="col-8 rounded-start">
+                <h2 class="text-warning mt-3">Weather</h2>
+                <div id="result" style="position: absolute; top: 65%; color: white; line-height: 1;">
+                    
+                </div>
+
+            </div>
+            <div class="col-4 bg-warning rounded-end">
+                <div class="d-flex pt-3">
+                    <input id="bar" class="form-control" type="text" placeholder="Enter Your City Name">
+                    <input onclick="Search()" class="btn btn-primary ms-2" type="button" value="Search">                    
+                </div>
+                <div id="results" class="mt-5">
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    const Search= async ()=>{
+        if(bar.value){
+            const cityName= bar.value
+            const Cit= await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${bar.value}&appid=8ac5c4d57ba6a4b3dfcf622700447b1e&units=metric`)
+            
+            if(Cit.status==200){
+                const City= await Cit.json()
+                console.log(City);
+
+                result.innerHTML=`
+                    <h3>${City.main.temp}</h3>
+                    <p>feel like ${City.main.feels_like}</p>
+                    <p class="fs-3">${City.name}</p>
+                    <p>Today is a good day to be alive</p>
+                `
+                results.innerHTML=`
+                        <h4>Weather Details</h4>
+                        <ul style="list-style: none;" class="mt-5">
+                            <li class="text-light">country</li>
+                            <li>${City.sys.country}</li>
+                            <li class="text-light mt-3">humidity</li>
+                            <li>${City.main.humidity}%</li>
+                            <li class="text-light mt-3">wind</li>
+                            <li>${City.wind.speed} kmph</li>
+                            <li class="text-light mt-3">pressure</li>
+                            <li>${City.main.pressure}</li>
+                        </ul>
+                `
+
+            }else{
+                alert("City Details Not Available, Please check!!!")
+            }
+
+        }else{
+            alert("Please type a city name !!!")
+        }
+    }
+</script>
+</html>
